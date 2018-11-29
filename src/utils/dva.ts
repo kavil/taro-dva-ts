@@ -6,7 +6,6 @@ import createLoading from 'dva-loading';
 let app;
 let store;
 let dispatch;
-let global: any = {};
 
 function createApp(opt) {
   // redux日志
@@ -15,9 +14,9 @@ function createApp(opt) {
   app.use(createLoading({}));
 
   // 适配支付宝小程序
-  // if (Taro.getEnv() === Taro.ENV_TYPE.ALIPAY) {
-  //   global = {};
-  // }
+  if (Taro.getEnv() === Taro.ENV_TYPE.ALIPAY) {
+    global = {};
+  }
 
   if (!global.registered) opt.models.forEach(model => app.model(model));
   global.registered = true;

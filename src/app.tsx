@@ -31,7 +31,9 @@ class App extends Component {
    */
   config: Config = {
     pages: [
-      'pages/index/index'
+      'pages/index/index',
+      'pages/account/index',
+      // 模板自动生成占位 勿删
     ],
     window: {
       backgroundTextStyle: 'light',

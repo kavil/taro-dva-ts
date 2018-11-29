@@ -4,7 +4,7 @@ import { baseUrl, noConsole } from '../config';
 
 export default (options = { method: 'GET', data: {}, url: '' }) => {
   if (!noConsole) {
-    console.log(`${new Date().toLocaleString()}【 M=${options.url} 】P=${JSON.stringify(options.data)}`);
+    console.log(`${new Date().toLocaleString()}【 URL=${options.url} 】PARAM=${JSON.stringify(options.data)}`);
   }
   return Taro.request({
     url: baseUrl + options.url,
@@ -20,7 +20,7 @@ export default (options = { method: 'GET', data: {}, url: '' }) => {
     const { statusCode, data } = res;
     if (statusCode >= 200 && statusCode < 300) {
       if (!noConsole) {
-        console.log(`${new Date().toLocaleString()}【 M=${options.url} 】【接口响应：】`,res.data);
+        console.log(`${new Date().toLocaleString()}【 M=${options.url} 】【接口响应：】`, res.data);
       }
       if (data.status !== 'ok') {
         Taro.showToast({
