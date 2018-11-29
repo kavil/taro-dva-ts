@@ -63,7 +63,6 @@ npm run tep `文件名`
     │   ├── dev.js                 // 开发时配置
     │   ├── index.js               // 默认配置
     │   └── prod.js                // 打包时配置
-    ├── screenshots            // 项目截图，和项目开发无关
     ├── site                   // H5静态文件（打包文件）
     ├── src                    // 源码目录
     │   ├── components             // 组件
@@ -74,14 +73,14 @@ npm run tep `文件名`
     │   │   └── home
     │   │       ├── index.js           // 页面逻辑
     │   │       ├── index.scss         // 页面样式
-    │   │       ├── model.js           // 页面models
-    │   │       └── service.js        // 页面api
+    │   ├── service            // 页面api等服务
     │   ├── styles             // 样式文件
     │   ├── utils              // 常用工具类
     │   ├── app.js             // 入口文件
     │   └── index.html
     ├── package.json
-    └── template.js            // pages模版快速生成脚本,执行命令 npm run tep `文件名`
+    ├── template.js            // pages模版快速生成脚本,执行命令 npm run tpl `文件名`
+    └── get-iconfont.js        // iconfont快速更新,执行命令 npm run iconfont
 
 
 # 文档
