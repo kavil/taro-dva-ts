@@ -1,8 +1,8 @@
 {
-	"miniprogramRoot": "dist/",
+	"miniprogramRoot": "./dist",
 	"projectname": "taro-dva-ts",
-	"description": "",
-	"appid": "wx2ec2acfd16a30a4a",
+	"description": "taro-dva-typescript脚手架",
+	"appid": "touristappid",
 	"setting": {
 		"urlCheck": true,
 		"es6": false,

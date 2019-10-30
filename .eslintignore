@@ -1,0 +1,7 @@
+/build/
+/config/
+/dist/
+/*.js
+/node_modules/
+global.d.ts
+/src/app.tsx

@@ -1,8 +1,13 @@
-
 const fs = require('fs');
 const request = require('request');
+const newPath = process.argv[2];
 
-const fontPath = 'http://at.alicdn.com/t/font_153770_qxdb439a27p'
+if (!newPath) {
+  console.log('【Error】需要 http://at.alicdn.com/t/...后面这一串');
+  console.log('示例：node get-iconfont.js font_153770_kdb4omr364a');
+  process.exit(0);
+}
+const fontPath = 'http://at.alicdn.com/t/font_153770_qxdb439a27p';
 const suffixs = ['.eot', '.woff', '.ttf', '.svg', '.css'];
 
 const promise = (ele) => {
@@ -26,7 +31,7 @@ const promise = (ele) => {
       } else {
         fs.writeFileSync(`./src/static/iconfont/iconfont${ele}`, body);
       }
-      resolve(`iconfont${ele}下载成功`);
+      resolve(`iconfont${ele}下载更新成功`);
     });
   });
 };
@@ -37,4 +42,3 @@ Promise.all(promises).then((res) => {
   console.log(res);
   process.exit(0);
 });
-

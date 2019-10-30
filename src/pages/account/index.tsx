@@ -1,25 +1,31 @@
 import Taro, { Component } from '@tarojs/taro';
+import { ComponentClass } from 'react';
 import { View } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
 import './index.scss';
 
-@connect(({account}) => ({
-  ...account,
+type PageState = {};
+interface PageDvaProps {
+  dispatch: Function;
+}
+interface PageOwnProps {
+  // 父组件要传放这
+}
+interface PageStateProps {
+  // 自己要用的放这
+}
+type IProps = PageStateProps & PageDvaProps & PageOwnProps;
+@connect(({ account, loading }) => ({
+  ...account
 }))
-export default class Account extends Component {
+class Account extends Component<IProps, {}> {
   config = {
-    navigationBarTitleText: 'account',
+    navigationBarTitleText: 'account'
   };
-
-  componentDidMount = () => {
-
-  };
-
+  componentDidMount() {}
   render() {
-    return (
-      <View className="account-page">
-        account
-      </View>
-    )
+    const {} = this.props;
+    return <View className="account-page">account</View>;
   }
 }
+export default Account as ComponentClass<PageOwnProps, PageState>;

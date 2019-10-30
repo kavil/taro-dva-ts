@@ -2,8 +2,6 @@ import Taro from '@tarojs/taro';
 import request from '../utils/request';
 
 export class AuthService {
-
-
   /**
    * 整合登录
    */
@@ -13,9 +11,9 @@ export class AuthService {
     const wxLoginRes = await this.wxLogin();
     const wxUserInfo = await this.wxGetUserInfo();
     const res = await request({
-      method: 'get',
+      method: 'GET',
       url: '',
-      data: { code: wxLoginRes.code, userInfo: wxUserInfo },
+      data: { code: wxLoginRes.code, userInfo: wxUserInfo }
     });
     if (res.errno === 0) {
       //存储用户信息
@@ -24,7 +22,7 @@ export class AuthService {
       return res;
     } else {
       Taro.showToast({
-        title: '登录失败',
+        title: '登录失败'
       });
       return;
     }
@@ -51,8 +49,6 @@ export class AuthService {
     return Taro.getUserInfo({
       lang: 'zh_CN',
       withCredentials: true
-    })
+    });
   }
-
-
 }

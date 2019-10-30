@@ -14,23 +14,33 @@ if (!dirName) {
 
 // 页面模版
 const indexTep = `import Taro, { Component } from '@tarojs/taro';
+import { ComponentClass } from 'react';
 import { View } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
 import './index.scss';
 
-@connect(({${dirName}}) => ({
+type PageState = {}
+interface PageDvaProps {
+  dispatch: Function,
+}
+interface PageOwnProps {
+  // 父组件要传放这
+}
+interface PageStateProps {
+  // 自己要用的放这
+}
+type IProps = PageStateProps & PageDvaProps & PageOwnProps
+@connect(({ ${dirName}, loading }) => ({
   ...${dirName},
 }))
-export default class ${titleCase(dirName)} extends Component {
+class ${titleCase(dirName)} extends Component<IProps, {}> {
   config = {
     navigationBarTitleText: '${dirName}',
   };
-
-  componentDidMount = () => {
-
+  componentDidMount() {
   };
-
   render() {
+    const { } = this.props;
     return (
       <View className="${dirName}-page">
         ${dirName}
@@ -38,11 +48,12 @@ export default class ${titleCase(dirName)} extends Component {
     )
   }
 }
+export default  ${titleCase(dirName)} as ComponentClass<PageOwnProps, PageState>;
 `;
 
 // scss文件模版
 const scssTep = `
-
+@import "../../static/css/mixin";
 .${dirName}-page {
 
 }
@@ -50,47 +61,38 @@ const scssTep = `
 
 // model文件模版
 const modelTep = `import * as Api from '../service/apiService';
-
 export default {
   namespace: '${dirName}',
   state: {
 
   },
-
   effects: {
-    * effectsDemo(_, { call, put }) {
-      const res = yield call(Api.demo, {});
-      if (res.code === 0) {
-        yield put({ type: 'save',
+    * load({ payload }, { call, put }) {
+      const res = yield call(Api.Demo, { payload });
+      if (res.errno === 0) {
+        yield put({ 
+          type: 'save',
           payload: {
-            topData: data,
-          } });
+            topData: res.data, // 模拟
+          } 
+        });
       }
     },
   },
-
   reducers: {
     save(state, { payload }) {
       return { ...state, ...payload };
     },
   },
-
 };
 `;
 
 // service页面模版
-const serviceTep = `import Request from '../utils/request';
-
-export const ${dirName} = data => Request({
-  url: this.baseUrl + 'url',
-  method: 'POST',
-  data,
-});
-
+const serviceTep = `export const ${dirName} = data => Request({ url: '/url', method: 'GET', data });
 // 模板自动生成占位 勿删`;
 
-const apptsTep = `'pages/${dirName}/index',
-      // 模板自动生成占位 勿删`
+const apptsTep = `'pages/index/index',
+      'pages/${dirName}/index',`
 
 const modelsIndexTep1 = `${dirName}Model,
   common,`
@@ -101,7 +103,8 @@ import common from './common';`
 try {
   fs.mkdirSync(`./src/pages/${dirName}`); // mkdir $1
 } catch (e) {
-  console.log(`${dirName}目录已存在`);
+  console.log(`${dirName}目录已存在，生成失败`);
+  process.exit(0);
 }
 fs.writeFileSync(`./src/pages/${dirName}/index.tsx`, indexTep);
 fs.writeFileSync(`./src/pages/${dirName}/index.scss`, scssTep);
@@ -116,7 +119,7 @@ if (!apiService.includes(`export const ${dirName}`)) {
 
 const appts = fs.readFileSync(`./src/app.tsx`, 'utf8');
 if (!appts.includes(`pages/${dirName}/index`)) {
-  const newAppts = appts.replace(/\/\/ 模板自动生成占位 勿删/, apptsTep);
+  const newAppts = appts.replace(/\'pages\/index\/index\'\,/, apptsTep);
   fs.writeFileSync('./src/app.tsx', newAppts);
 }
 
@@ -127,7 +130,7 @@ if (!modelsIndex.includes(`${dirName}Model`)) {
   fs.writeFileSync('./src/models/index.ts', newModelsIndex);
 }
 
-console.log(`模版${dirName}已创建`);
+console.log(`模版${dirName}已创建 enjoy`);
 
 function titleCase(str) {
   const array = str.toLowerCase().split(' ');
