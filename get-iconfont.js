@@ -7,7 +7,7 @@ if (!newPath) {
   console.log('示例：node get-iconfont.js font_153770_kdb4omr364a');
   process.exit(0);
 }
-const fontPath = 'http://at.alicdn.com/t/font_153770_qxdb439a27p';
+const fontPath = 'http://at.alicdn.com/t/' + newPath;
 const suffixs = ['.eot', '.woff', '.ttf', '.svg', '.css'];
 
 const promise = (ele) => {
