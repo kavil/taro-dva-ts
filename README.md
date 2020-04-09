@@ -78,8 +78,8 @@ npm run tpl `文件名`
     │   ├── app.ts             // 入口文件
     │   └── index.html
     ├── package.json
-    ├── template.ts            // pages模版快速生成脚本,执行命令 npm run tpl `文件名`
-    └── get-iconfont.ts        // iconfont快速更新,执行命令 npm run iconfont
+    ├── template.js            // pages模版快速生成脚本,执行命令 npm run tpl `文件名`
+    └── get-iconfont.js        // iconfont快速更新,执行命令 npm run iconfont
 
 
 # 文档
