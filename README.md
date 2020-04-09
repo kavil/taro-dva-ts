@@ -6,6 +6,10 @@ npm tpl 'page-name'
 自动从iconfont更新
 npm icon 'iconfont下载链接后缀'
 
+node >= 12.0.0
+
+Taro >= v2.0.0
+
 # 技术栈
 
 React + Taro + Dva + Sass + typeScript
@@ -57,26 +61,25 @@ npm run tpl `文件名`
     ├── .rn_temp               // RN编译结果目录
     ├── dist                   // 小程序编译结果目录
     ├── config                 // Taro配置目录
-    │   ├── dev.js                 // 开发时配置
-    │   ├── index.js               // 默认配置
-    │   └── prod.js                // 打包时配置
-    ├── site                   // H5静态文件（打包文件）
+    │   ├── dev.ts                 // 开发时配置
+    │   ├── index.ts               // 默认配置
+    │   └── prod.ts                // 打包时配置
     ├── src                    // 源码目录
     │   ├── components             // 组件
     │   ├── config                 // 项目开发配置
     │   ├── models                 // redux models
     │   ├── pages                  // 页面文件目录
     │   │   └── account
-    │   │       ├── index.js           // 页面逻辑
+    │   │       ├── index.ts           // 页面逻辑
     │   │       ├── index.scss         // 页面样式
     │   ├── service            // 页面api等服务
     │   ├── static             // 字体、图片
     │   ├── utils              // 常用工具类
-    │   ├── app.js             // 入口文件
+    │   ├── app.ts             // 入口文件
     │   └── index.html
     ├── package.json
-    ├── template.js            // pages模版快速生成脚本,执行命令 npm run tpl `文件名`
-    └── get-iconfont.js        // iconfont快速更新,执行命令 npm run iconfont
+    ├── template.ts            // pages模版快速生成脚本,执行命令 npm run tpl `文件名`
+    └── get-iconfont.ts        // iconfont快速更新,执行命令 npm run iconfont
 
 
 # 文档

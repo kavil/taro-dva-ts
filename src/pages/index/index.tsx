@@ -1,31 +1,19 @@
-import { ComponentClass } from 'react';
-import Taro, { Component, Config } from '@tarojs/taro';
-import { View, Text } from '@tarojs/components';
-import './index.scss';
+import Taro, { Component, Config } from '@tarojs/taro'
+import { View, Text } from '@tarojs/components'
+import './index.scss'
 
-// type PageStateProps = {
-//   counter: {
-//     num: number
-//   }
-// }
+export default class Index extends Component {
 
-// type PageDispatchProps = {
-//   add: () => void
-//   dec: () => void
-//   asyncAdd: () => any
-// }
+  componentWillMount () { }
 
-// type PageOwnProps = {}
+  componentDidMount () { }
 
-// type PageState = {}
+  componentWillUnmount () { }
 
-// type IProps = PageStateProps & PageDispatchProps & PageOwnProps
+  componentDidShow () { }
 
-// interface Index {
-//   props: IProps;
-// }
+  componentDidHide () { }
 
-class Index extends Component {
   /**
    * 指定config的类型声明为: Taro.Config
    *
@@ -35,30 +23,13 @@ class Index extends Component {
    */
   config: Config = {
     navigationBarTitleText: '首页'
-  };
-  componentWillMount() {}
-
-  componentWillReceiveProps(nextProps) {
-    console.log(this.props, nextProps);
   }
 
-  componentDidMount() {}
-
-  componentWillUnmount() {}
-
-  componentDidShow() {}
-
-  componentDidHide() {}
-
-  render() {
+  render () {
     return (
-      <View className="index">
-        <View>
-          <Text>Hello, World</Text>
-        </View>
+      <View className='index'>
+        <Text>Hello world!</Text>
       </View>
-    );
+    )
   }
 }
-
-export default Index as ComponentClass;
