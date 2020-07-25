@@ -1,5 +1,6 @@
 {
-	"miniprogramRoot": "./dist",
+	"miniprogramRoot": "miniprogram/dist/",
+	"cloudfunctionRoot": "cloudfunctions/",
 	"projectname": "taro-dva-ts",
 	"description": "taro-dva-typescript脚手架",
 	"appid": "touristappid",
