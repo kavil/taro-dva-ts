@@ -1,5 +1,5 @@
 {
-  "extends": ["taro", "plugin:prettier/recommended"],
+  "extends": ["taro/react'", "plugin:prettier/recommended"],
   "rules": {
     "no-unused-vars": ["error", { "varsIgnorePattern": "Taro" }],
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".tsx"] }]
