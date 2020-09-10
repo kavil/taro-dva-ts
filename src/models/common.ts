@@ -7,14 +7,11 @@ export default {
     userInfo: Taro.getStorageSync('userInfo')
   },
 
-  effects: {
-
-  },
+  effects: {},
 
   reducers: {
     save(state, { payload }) {
       return { ...state, ...payload };
-    },
-  },
-
+    }
+  }
 };

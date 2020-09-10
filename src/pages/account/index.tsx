@@ -1,31 +1,38 @@
-import Taro, { Component } from '@tarojs/taro';
-import { ComponentClass } from 'react';
+import React, { ComponentClass } from 'react';
 import { View } from '@tarojs/components';
-import { connect } from '@tarojs/redux';
-import './index.scss';
+import { connect } from 'react-redux';
 
-type PageState = {};
-interface PageDvaProps {
-  dispatch: Function;
+import { StateType } from '../../models/accountModel';
+import { ConnectProps, ConnectState } from '../../models/connect';
+
+import './index.scss';
+import { RectWrap } from '../../components/RectWrap';
+
+interface OwnProps {
+  // 父组件要传的prop放这
+  value: number;
 }
-interface PageOwnProps {
-  // 父组件要传放这
+interface OwnState {
+  // 自己要用的state放这
 }
-interface PageStateProps {
-  // 自己要用的放这
-}
-type IProps = PageStateProps & PageDvaProps & PageOwnProps;
-@connect(({ account, loading }) => ({
-  ...account
+
+type IProps = StateType & ConnectProps & OwnProps;
+@connect(({ account, loading }: ConnectState) => ({
+  ...account,
+  ...loading
 }))
-class Account extends Component<IProps, {}> {
-  config = {
-    navigationBarTitleText: 'account'
-  };
-  componentDidMount() {}
+class Account extends React.Component<IProps, OwnState> {
+  componentDidMount() {
+    console.log(this.props.accountState);
+  }
   render() {
-    const {} = this.props;
-    return <View className="account-page">account</View>;
+    const { value } = this.props;
+    return (
+      <View className="account-page">
+        <RectWrap title="Taro account页面">{value || 'account'}</RectWrap>
+      </View>
+    );
   }
 }
-export default Account as ComponentClass<PageOwnProps, PageState>;
+
+export default Account as ComponentClass<OwnProps>;
