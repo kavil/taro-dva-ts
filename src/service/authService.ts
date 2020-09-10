@@ -10,7 +10,7 @@ export class AuthService {
     if (checkLogin) return;
     const wxLoginRes = await this.wxLogin();
     const wxUserInfo = await this.wxGetUserInfo();
-    const res = await request({
+    const res: any = await request({
       method: 'GET',
       url: '',
       data: { code: wxLoginRes.code, userInfo: wxUserInfo }

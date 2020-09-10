@@ -1,5 +1,5 @@
 import { AnyAction, Dispatch } from 'redux';
-import { StateType as accountState } from './accountModel';
+import { StateType as AccountState } from './accountModel';
 
 export interface Loading {
   global: boolean;
@@ -12,5 +12,5 @@ export interface ConnectProps {
 
 export interface ConnectState {
   loading: Loading;
-  account: accountState;
+  account: AccountState;
 }

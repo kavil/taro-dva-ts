@@ -1,9 +1,13 @@
+/* eslint-disable import/no-commonjs */
 /**
  * pages模版快速生成脚本,执行命令 npm run tpl `文件名`
  */
 
-// eslint-disable-next-line import/no-commonjs
 const fs = require('fs');
+
+const prettier = require('prettier');
+
+const prettierConfig = Object.assign(JSON.parse(fs.readFileSync(`./.prettierrc`, 'utf8')), { parser: 'babel' });
 
 const dirName = process.argv[2];
 
@@ -22,7 +26,6 @@ import { StateType } from '../../models/${dirName}Model';
 import { ConnectProps, ConnectState } from '../../models/connect';
 
 import './index.scss';
-import { RectWrap } from '../../components/RectWrap';
 
 interface OwnProps {
   // 父组件要传的prop放这
@@ -37,17 +40,11 @@ type IProps = StateType & ConnectProps & OwnProps;
   ...${dirName},
   ...loading
 }))
-class ${titleCase(dirName)} extends Component<IProps, {}> {
-
-  componentDidMount() {
-  };
+class ${titleCase(dirName)} extends React.Component<IProps, OwnState> {
+  componentDidMount() {}
   render() {
-    const { } = this.props;
-    return (
-      <View className="${dirName}-page">
-        ${dirName}
-      </View>
-    )
+    const {} = this.props;
+    return <View className="${dirName}-page">${dirName}</View>;
   }
 }
 export default ${titleCase(dirName)} as ComponentClass<OwnProps>;
@@ -82,41 +79,42 @@ interface ModelType {
 const model: Model & ModelType = {
   namespace: '${dirName}',
   state: {
-    ${dirName}State: '00'
+    ${dirName}State: '0'
   },
   effects: {
-    * load({ payload }, { call, put }) {
+    *load({ payload }, { call, put }) {
       const res = yield call(Api.Demo, { payload });
       if (res.errno === 0) {
-        yield put({ 
+        yield put({
           type: 'save',
           payload: {
-            topData: res.data, // 模拟
-          } 
+            topData: res.data // 模拟
+          }
         });
       }
-    },
+    }
   },
   reducers: {
     save(state, { payload }) {
       return { ...state, ...payload };
-    },
-  },
+    }
+  }
 };
 
 export default model;
 `;
 
 // service页面模版
-const serviceTep = `export const ${dirName} = data => Request({ url: '/url', method: 'GET', data });
-// 模板自动生成占位 勿删`;
+const serviceTep = `export const ${dirName} = (data) => Request({ url: '/url', method: 'GET', data });
+`;
 
-const appConfig = `export default {
-  navigationBarTitleText: 'account'
-};`;
+const indexConfig = `export default {
+  navigationBarTitleText: '${dirName}'
+};
+`;
 
-const modelsIndexTep1 = `${dirName}Model,
-  common,`;
+const modelsIndexTep1 = `common,
+  ${dirName}Model,`;
 
 const modelsIndexTep2 = `import ${dirName}Model from './${dirName}Model';
 import common from './common';`;
@@ -125,7 +123,7 @@ const connectTmp1 = `import { AnyAction, Dispatch } from 'redux';
 import { StateType as ${titleCase(dirName)}State } from './${dirName}Model';`;
 
 const connectTmp2 = `loading: Loading;
-dirName: ${titleCase(dirName)};`;
+  ${dirName}: ${titleCase(dirName)}State;`;
 
 try {
   fs.mkdirSync(`./src/pages/${dirName}`); // mkdir $1
@@ -135,13 +133,13 @@ try {
 }
 fs.writeFileSync(`./src/pages/${dirName}/index.tsx`, indexTep);
 fs.writeFileSync(`./src/pages/${dirName}/index.scss`, scssTep);
-fs.writeFileSync(`./src/pages/${dirName}/index.config.ts`, appConfig);
+fs.writeFileSync(`./src/pages/${dirName}/index.config.ts`, indexConfig);
 fs.writeFileSync(`./src/models/${dirName}Model.ts`, modelTep);
 
 const apiService = fs.readFileSync(`./src/service/apiService.ts`, 'utf8');
 
 if (!apiService.includes(`export const ${dirName}`)) {
-  const newApiService = apiService.replace(/\/\/ 模板自动生成占位 勿删/, serviceTep);
+  const newApiService = apiService + serviceTep;
   fs.writeFileSync('./src/service/apiService.ts', newApiService);
 }
 
@@ -152,11 +150,17 @@ if (!connectFile.includes(`import { StateType as ${dirName}State } from './${dir
   fs.writeFileSync('./src/models/connect.d.ts', newConnectFile);
 }
 
+const appConfigFile = fs.readFileSync(`./src/app.config.ts`, 'utf8');
+if (!appConfigFile.includes(`pages/${dirName}/index`)) {
+  const newAppConfigFile = appConfigFile.replace(/pages\: \[/, `pages: ['pages/${dirName}/index',`);
+  fs.writeFileSync('./src/app.config.ts', prettier.format(newAppConfigFile, prettierConfig));
+}
+
 const modelsIndex = fs.readFileSync(`./src/models/index.ts`, 'utf8');
 if (!modelsIndex.includes(`${dirName}Model`)) {
   const _newModelsIndex = modelsIndex.replace(/common,/, modelsIndexTep1);
   const newModelsIndex = _newModelsIndex.replace("import common from './common';", modelsIndexTep2);
-  fs.writeFileSync('./src/models/index.ts', newModelsIndex);
+  fs.writeFileSync('./src/models/index.ts', prettier.format(newModelsIndex, prettierConfig));
 }
 
 console.log(`模版${dirName}已创建 enjoy`);
