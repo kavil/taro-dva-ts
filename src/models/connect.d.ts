@@ -1,5 +1,4 @@
 import { AnyAction, Dispatch } from 'redux';
-
 import { StateType as accountState } from './accountModel';
 
 export interface Loading {

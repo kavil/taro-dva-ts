@@ -2,6 +2,7 @@
  * pages模版快速生成脚本,执行命令 npm run tpl `文件名`
  */
 
+// eslint-disable-next-line import/no-commonjs
 const fs = require('fs');
 
 const dirName = process.argv[2];
@@ -13,30 +14,31 @@ if (!dirName) {
 }
 
 // 页面模版
-const indexTep = `import Taro, { Component } from '@tarojs/taro';
-import { ComponentClass } from 'react';
+const indexTep = `import React, { ComponentClass } from 'react';
 import { View } from '@tarojs/components';
-import { connect } from '@tarojs/redux';
-import './index.scss';
+import { connect } from 'react-redux';
 
-type PageState = {}
-interface PageDvaProps {
-  dispatch: Function,
+import { StateType } from '../../models/${dirName}Model';
+import { ConnectProps, ConnectState } from '../../models/connect';
+
+import './index.scss';
+import { RectWrap } from '../../components/RectWrap';
+
+interface OwnProps {
+  // 父组件要传的prop放这
+  value: number;
 }
-interface PageOwnProps {
-  // 父组件要传放这
+interface OwnState {
+  // 自己要用的state放这
 }
-interface PageStateProps {
-  // 自己要用的放这
-}
-type IProps = PageStateProps & PageDvaProps & PageOwnProps
-@connect(({ ${dirName}, loading }) => ({
+
+type IProps = StateType & ConnectProps & OwnProps;
+@connect(({ ${dirName}, loading }: ConnectState) => ({
   ...${dirName},
+  ...loading
 }))
 class ${titleCase(dirName)} extends Component<IProps, {}> {
-  config = {
-    navigationBarTitleText: '${dirName}',
-  };
+
   componentDidMount() {
   };
   render() {
@@ -48,7 +50,7 @@ class ${titleCase(dirName)} extends Component<IProps, {}> {
     )
   }
 }
-export default  ${titleCase(dirName)} as ComponentClass<PageOwnProps, PageState>;
+export default ${titleCase(dirName)} as ComponentClass<OwnProps>;
 `;
 
 // scss文件模版
@@ -60,11 +62,27 @@ const scssTep = `
 `;
 
 // model文件模版
-const modelTep = `import * as Api from '../service/apiService';
-export default {
+const modelTep = `import { Reducer } from 'redux';
+import { Model } from 'dva';
+import * as Api from '../service/apiService';
+
+export interface StateType {
+  ${dirName}State: string;
+}
+
+interface ModelType {
+  namespace: string;
+  state: StateType;
+  effects: {};
+  reducers: {
+    save: Reducer;
+  };
+}
+
+const model: Model & ModelType = {
   namespace: '${dirName}',
   state: {
-
+    ${dirName}State: '00'
   },
   effects: {
     * load({ payload }, { call, put }) {
@@ -85,20 +103,29 @@ export default {
     },
   },
 };
+
+export default model;
 `;
 
 // service页面模版
 const serviceTep = `export const ${dirName} = data => Request({ url: '/url', method: 'GET', data });
 // 模板自动生成占位 勿删`;
 
-const apptsTep = `'pages/index/index',
-      'pages/${dirName}/index',`
+const appConfig = `export default {
+  navigationBarTitleText: 'account'
+};`;
 
 const modelsIndexTep1 = `${dirName}Model,
-  common,`
+  common,`;
 
 const modelsIndexTep2 = `import ${dirName}Model from './${dirName}Model';
-import common from './common';`
+import common from './common';`;
+
+const connectTmp1 = `import { AnyAction, Dispatch } from 'redux';
+import { StateType as ${titleCase(dirName)}State } from './${dirName}Model';`;
+
+const connectTmp2 = `loading: Loading;
+dirName: ${titleCase(dirName)};`;
 
 try {
   fs.mkdirSync(`./src/pages/${dirName}`); // mkdir $1
@@ -108,6 +135,7 @@ try {
 }
 fs.writeFileSync(`./src/pages/${dirName}/index.tsx`, indexTep);
 fs.writeFileSync(`./src/pages/${dirName}/index.scss`, scssTep);
+fs.writeFileSync(`./src/pages/${dirName}/index.config.ts`, appConfig);
 fs.writeFileSync(`./src/models/${dirName}Model.ts`, modelTep);
 
 const apiService = fs.readFileSync(`./src/service/apiService.ts`, 'utf8');
@@ -117,10 +145,11 @@ if (!apiService.includes(`export const ${dirName}`)) {
   fs.writeFileSync('./src/service/apiService.ts', newApiService);
 }
 
-const appts = fs.readFileSync(`./src/app.tsx`, 'utf8');
-if (!appts.includes(`pages/${dirName}/index`)) {
-  const newAppts = appts.replace(/\'pages\/index\/index\'\,/, apptsTep);
-  fs.writeFileSync('./src/app.tsx', newAppts);
+const connectFile = fs.readFileSync(`./src/models/connect.d.ts`, 'utf8');
+if (!connectFile.includes(`import { StateType as ${dirName}State } from './${dirName}Model'`)) {
+  const _newConnectFile = connectFile.replace(/import { AnyAction, Dispatch } from 'redux';/, connectTmp1);
+  const newConnectFile = _newConnectFile.replace(/loading: Loading;/, connectTmp2);
+  fs.writeFileSync('./src/models/connect.d.ts', newConnectFile);
 }
 
 const modelsIndex = fs.readFileSync(`./src/models/index.ts`, 'utf8');

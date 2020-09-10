@@ -1,6 +1,5 @@
 /* eslint-disable import/no-commonjs */
 const fs = require('fs');
-
 const request = require('request');
 
 const newPath = process.argv[2];
