@@ -8,7 +8,7 @@ npm icon 'iconfont下载链接后缀'
 
 node >= 12.0.0
 
-Taro >= v2.0.0
+Taro >= v3.0.9
 
 # 技术栈
 
@@ -72,10 +72,12 @@ npm run tpl `文件名`
     │   │   └── account
     │   │       ├── index.ts           // 页面逻辑
     │   │       ├── index.scss         // 页面样式
+    │   │       ├── index.config.ts    // 页面配置
     │   ├── service            // 页面api等服务
     │   ├── static             // 字体、图片
     │   ├── utils              // 常用工具类
     │   ├── app.ts             // 入口文件
+    │   ├── app.config.ts      // 入口配置文件
     │   └── index.html
     ├── package.json
     ├── template.js            // pages模版快速生成脚本,执行命令 npm run tpl `文件名`
