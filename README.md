@@ -12,7 +12,7 @@ Taro >= v3.0.9
 
 # 技术栈
 
-React + Taro + Dva + Sass + typeScript
+React + Taro + Dva + Scss + typeScript
 
 使用eslint+prettier格式化
 
